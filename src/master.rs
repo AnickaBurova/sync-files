@@ -17,6 +17,10 @@ use self::encoding::all::ISO_8859_1;
 
 pub fn run_master<T : Write>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
     let mut files = init_files_list(Path::new(&cfg.path));
+    println!("Monitoring these files:");
+    for &(ref path, _, _) in files.iter(){
+        println!("\t{}",path);
+    }
     loop {
         for &(ref path, _, sync) in files.iter(){
             if sync {
@@ -28,6 +32,7 @@ pub fn run_master<T : Write>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
                     Err(e) => {
                         println!("{}", e);vec!()}
                 };
+                println!("Sending file: {} of size: {}", path, buffer.len() );
 
                 try!(stream.write_u16::<LittleEndian>(name_data.len() as u16));
                 try!(stream.write(&name_data[..]));
