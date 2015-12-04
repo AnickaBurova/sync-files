@@ -42,8 +42,10 @@ pub fn init_files_list(path_pattern : &Path) -> Vec<(String,FileTime,bool)>{
     for entry in glob(path_pattern.to_str().unwrap()).unwrap(){
         match entry {
             Ok(path) => {
-                let mod_time = check_file(&path,FileTime::zero()).unwrap();
-                res.push((path.to_str().unwrap().to_owned(),mod_time,true));
+                if path.is_file(){
+                    let mod_time = check_file(&path,FileTime::zero()).unwrap();
+                    res.push((path.to_str().unwrap().to_owned(),mod_time,true));
+                }
             }
             Err(e) => println!("{:?}",e),
         }
@@ -60,9 +62,11 @@ fn test_get_time() {
     assert!(md2.is_none());
 }
 
+// fn get_all_files()
+
 #[test]
 fn test_glob() {
-    for entry in glob("src/*.rs").unwrap(){
+    for entry in glob("../redirect-keyboard/**/*").unwrap(){
         match entry {
             Ok(path) => println!("{:?}",path.display()),
             Err(e) => println!("{:?}",e),
@@ -71,7 +75,7 @@ fn test_glob() {
 }
 #[test]
 fn test_init() {
-    let files = init_files_list(Path::new("src/*.*"));
+    let files = init_files_list(Path::new("src/*"));
     for &(ref path,mod_time,sync) in files.iter(){
         assert!(sync);
         println!("{}: {} - {}",path,mod_time, if sync {"sync"}else {"no-sync"} );

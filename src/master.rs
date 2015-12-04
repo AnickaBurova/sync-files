@@ -24,6 +24,7 @@ pub fn run_master<T : Write>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
     loop {
         for &(ref path, _, sync) in files.iter(){
             if sync {
+                println!("Opening file {}", path );
                 let mut file = try!(fs::File::open(&path));
                 let mut buffer = Vec::new();
                 try!(file.read_to_end(&mut buffer));
@@ -39,6 +40,7 @@ pub fn run_master<T : Write>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
 
                 try!(stream.write_u32::<LittleEndian>(buffer.len() as u32));
                 try!(stream.write(&buffer[..]));
+                println!("File sent.");
             }
         }
         thread::sleep(Duration::new(2,0));
