@@ -42,7 +42,9 @@ pub fn init_files_list(path_pattern : &Path) -> Vec<(String,FileTime,bool)>{
     for entry in glob(path_pattern.to_str().unwrap()).unwrap(){
         match entry {
             Ok(path) => {
-                if path.as_path().is_file(){
+                let metadata = fs::metadata(&path.to_str().unwrap()).unwrap();
+
+                if metadata.is_dir(){
                     let mod_time = check_file(&path,FileTime::zero()).unwrap();
                     res.push((path.to_str().unwrap().to_owned(),mod_time,true));
                 }
