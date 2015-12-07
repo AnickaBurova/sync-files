@@ -32,7 +32,7 @@ pub fn run_slave<T : Read>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
         println!("Receiving file: {} of size: {}", path, data.len() );
         // let full_path = Path::new(&cfg.path).join(&path);
         println!("Writing data to {}",path);
-        // let mut file = try!(File::create(full_path));
-        // try!(file.write_all(&data[..]));
+        let mut file = try!(File::create(path));
+        try!(file.write_all(&data[..]));
     }
 }
