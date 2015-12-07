@@ -28,6 +28,7 @@ pub fn run_master<T : Write>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
                 let mut file = try!(fs::File::open(&path));
                 let mut buffer = Vec::new();
                 try!(file.read_to_end(&mut buffer));
+                // let path_to_send =
                 let name_data = match ISO_8859_1.encode(&path[..],EncoderTrap::Strict){
                     Ok(d) => d,
                     Err(e) => {

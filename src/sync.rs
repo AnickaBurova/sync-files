@@ -44,7 +44,7 @@ pub fn init_files_list(path_pattern : &Path) -> Vec<(String,FileTime,bool)>{
             Ok(path) => {
                 let metadata = fs::metadata(&path.to_str().unwrap()).unwrap();
 
-                if metadata.is_dir(){
+                if !metadata.is_dir(){
                     let mod_time = check_file(&path,FileTime::zero()).unwrap();
                     res.push((path.to_str().unwrap().to_owned(),mod_time,true));
                 }
@@ -68,13 +68,15 @@ fn test_get_time() {
 
 #[test]
 fn test_glob() {
-    for entry in glob("../redirect-keyboard/**/*").unwrap(){
+    for entry in glob("../redirect-keyboard/src/**/*").unwrap(){
         match entry {
             Ok(path) => println!("{:?}",path.display()),
             Err(e) => println!("{:?}",e),
         }
     }
 }
+
+
 #[test]
 fn test_init() {
     let files = init_files_list(Path::new("src/*"));

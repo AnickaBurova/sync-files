@@ -30,8 +30,8 @@ pub fn run_slave<T : Read>(stream : &mut T, cfg : SyncConfig) -> Result<()>{
         let mut data = vec![0u8;0];
         try!(stream.take(data_length as u64).read_to_end(&mut data));
         println!("Receiving file: {} of size: {}", path, data.len() );
-        let full_path = Path::new(&cfg.path).join(&path);
-        println!("Writing data to {}",full_path.display());
+        // let full_path = Path::new(&cfg.path).join(&path);
+        println!("Writing data to {}",path);
         // let mut file = try!(File::create(full_path));
         // try!(file.write_all(&data[..]));
     }
